@@ -1,4 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//Variáveis Globais - ==================================
+
+int proximoCodigo = 1;
 
 //Structs - ============================================
 
@@ -17,15 +23,50 @@ typedef struct{
 
 }Carrinho;
 
+//Funções Auxiliares - =================================
+
+Produto *criarProduto(char* nome, float preco){
+    Produto *p = calloc(1, sizeof(Produto));
+    strcpy(p->nome, nome);
+    p->preco = preco;
+    p->codigo = proximoCodigo++;
+
+    return p;
+}
+
+void infoProduto(){
+
+}
 
 //Funções - ============================================
 
 void cadastrarProduto(){
+
+    char nome[50];
+    float preco;
+    int codigo;
+
     printf("\nOpção selecionada: [(1)] - | Cadastrar um produto |\n");
+
+
+    printf("Digite o nome do produto:\n>> ");
+    scanf("%s", &nome);
+
+    printf("Digite o preço do produto:\n>> ");
+    scanf("%f", &preco);
+
+    Produto *p = criarProduto(nome, preco);
+
 }
 
-void listarProdutos(){
+void listarProdutos(Produto produtos[], int quantidadeProdutos){
     printf("\nOpção selecionada: [(2)] - | Listar os produtos cadastrados |\n");
+
+    for (int i = 0; i < quantidadeProdutos; i++){
+        printf("Código: %d\n", produtos[i].codigo);
+        printf("Nome: %s\n", produtos[i].nome);
+        printf("Preço: R$%.2f\n", produtos[i].preco);
+    }
 }
 
 void comprarProduto(){
@@ -52,60 +93,71 @@ void fecharPrograma(){
     printf("\nFinalizando programa...\nAté a próxima!");
 }
 
-void erro(){}
+void erro(){
+    printf("\nOpção inválida, tente novamente.\n");
+}
 
 //Função Menu - ==========================================
 
 void menu(){
 
+    Produto produtos[50]; //Array estático, armazena até 50 produtos no total
+    Carrinho carrinho[50]; //Array estático, armazena até 50 produtos no carrinho
+
     int escolhaMenu;
+
+    int quantidadeProdutos = 0;
 
     printf("---------------------------------\n");
     printf("=================================\n");
     printf("=== | Mercadinho da Esquina | ===\n");
     printf("=================================\n");
     printf("---------------------------------\n");
-
-    printf("\nDigite o que gostaria de fazer:\n\n");
-
-    printf("[1] - Cadastrar um produto\n[2] - Listar os produtos cadastrados\n[3] - Adicionar produtos ao carrinho\n[4] - Visualizar o carrinho\n[5] - Finalizar o pedido\n[6] - Verificar a presença de um produto no carrinho\n[7] - Pegar um produto por código\n[8] - Fechar o programa\n\n>> ");
-    scanf("%d", &escolhaMenu);
     
-    switch(escolhaMenu){
-    case 1:
-        cadastrarProduto();
-        break;
-    case 2:
-        listarProdutos();
-        break;
-    case 3:
-        comprarProduto();
-        break;
-    case 4:
-        visualizarCarrinho();
-        break;
-    case 5:
-        fecharPedido();
-        break;
-    case 6:
-        temNoCarrinho();
-        break;
-    case 7:
-        pegarProdutoPorCodigo();
-        break;
-    case 8:
-        fecharPrograma();
-        break;
-    default:
-        erro();
-        break;
-    }
+    do{
 
+        printf("\nDigite o que gostaria de fazer:\n\n");
+
+        printf("[1] - Cadastrar um produto\n[2] - Listar os produtos cadastrados\n[3] - Adicionar produtos ao carrinho\n[4] - Visualizar o carrinho\n[5] - Finalizar o pedido\n[6] - Verificar a presença de um produto no carrinho\n[7] - Pegar um produto por código\n[8] - Fechar o programa\n\n>> ");
+        scanf("%d", &escolhaMenu);
+
+        switch(escolhaMenu){
+            case 1:
+                cadastrarProduto();
+                break;
+            case 2:
+                listarProdutos(produtos, quantidadeProdutos);
+                break;
+            case 3:
+                comprarProduto();
+                break;
+            case 4:
+                visualizarCarrinho();
+                break;
+            case 5:
+                fecharPedido();
+                break;
+            case 6:
+                temNoCarrinho();
+                break;
+            case 7:
+                pegarProdutoPorCodigo();
+                break;
+            case 8:
+                fecharPrograma();
+                break;
+            default:
+                erro();
+                break;
+        }
+    }while(escolhaMenu != 8);
 }
 
 //Main - ===============================================
 
 int main(){
+    
+    Produto produto;
 
     printf("  _    _       _                    _     _           _         _____      _    __  _ _                 _        ____                ___ _       \n");
     printf(" | |  | |     (_)                  (_)   | |         | |       / ____|    | |  /_/ | (_)               | |      |  _ \\              /_/ (_)      \n");
