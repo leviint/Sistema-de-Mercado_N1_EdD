@@ -3,10 +3,6 @@
 #include <string.h>
 #include <locale.h>
 
-//Variáveis Globais - ==================================
-
-int proximoCodigo = 1;
-
 //Structs - ============================================
 
 typedef struct{
@@ -23,6 +19,13 @@ typedef struct{
     int quantidade;
 
 }Carrinho;
+
+//Variáveis Globais - ==================================
+
+int proximoCodigo = 1;
+#define MAX_PRODUTOS 50
+Produto* listaProdutos[MAX_PRODUTOS];
+int numProdutos = 0;
 
 //Funções Auxiliares - =================================
 
@@ -67,16 +70,27 @@ void cadastrarProduto(){
 
     infoProduto(p);
 
+    if(numProdutos < MAX_PRODUTOS){
+        listaProdutos[numProdutos++] = p;
+        printf("\nProduto cadastrado.\n");
+    }else{
+        printf("\nErro: Numero máximo de produtos cadastrados atingido.\n");
+    }
+
 }
 
-void listarProdutos(Produto produtos[], int quantidadeProdutos){
+void listarProdutos(){
     printf("\nOpção selecionada: [(2)] - | Listar os produtos cadastrados |\n");
 
-    for (int i = 0; i < quantidadeProdutos; i++){
-        printf("Código: %d\n", produtos[i].codigo);
-        printf("Nome: %s\n", produtos[i].nome);
-        printf("Preço: R$%.2f\n", produtos[i].preco);
+    if (numProdutos == 0){
+        printf("\nNenhum produto foi cadastrado.\n");
+        return;
     }
+
+    for (int i = 0; i < numProdutos; i++){
+        infoProduto(listaProdutos[i]);
+    }
+
 }
 
 void comprarProduto(){
