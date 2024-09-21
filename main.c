@@ -22,12 +22,14 @@ typedef struct{
 
 //Variáveis Globais - ==================================
 
-int proximoCodigo = 1;
+int proximoCodigo = 1; //Mostra qual deve ser o próximo código do produto registrado
 
+//Atribuições para a lista de produtos
 #define MAX_PRODUTOS 50
 Produto* listaProdutos[MAX_PRODUTOS];
 int numProdutos = 0;
 
+//Atribuições para o carrinho
 #define MAX_CARRINHO 50
 Produto* carrinho[MAX_CARRINHO];
 int numCarrinho = 0;
@@ -135,6 +137,15 @@ void comprarProduto(){
 
 void visualizarCarrinho(){
     printf("\nOpção selecionada: [(4)] - | Visualizar o carrinho |\n");
+
+    if (numCarrinho == 0){
+        printf("\nNenhum produto foi adicionado ao carrinho.\n");
+        return;
+    }
+
+    for (int i = 0; i < numCarrinho; i++){
+        infoProduto(carrinho[i]);
+    }
 }
 
 void fecharPedido(){
