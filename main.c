@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 //Variáveis Globais - ==================================
 
@@ -34,8 +35,16 @@ Produto *criarProduto(char* nome, float preco){
     return p;
 }
 
-void infoProduto(){
+void infoProduto(Produto *p){
+    if (p == NULL) {
+        printf("Produto inválido!\n");
+        return;
+    }
 
+    printf("\nInformações do Produto:\n");
+    printf("Código: %d\n", p->codigo);
+    printf("Nome: %s\n", p->nome);
+    printf("Preço: R$ %.2f\n", p->preco);
 }
 
 //Funções - ============================================
@@ -44,7 +53,6 @@ void cadastrarProduto(){
 
     char nome[50];
     float preco;
-    int codigo;
 
     printf("\nOpção selecionada: [(1)] - | Cadastrar um produto |\n");
 
@@ -56,6 +64,8 @@ void cadastrarProduto(){
     scanf("%f", &preco);
 
     Produto *p = criarProduto(nome, preco);
+
+    infoProduto(p);
 
 }
 
@@ -100,6 +110,7 @@ void erro(){
 //Função Menu - ==========================================
 
 void menu(){
+    setlocale(LC_ALL, "pt_BR.UTF8");
 
     Produto produtos[50]; //Array estático, armazena até 50 produtos no total
     Carrinho carrinho[50]; //Array estático, armazena até 50 produtos no carrinho
