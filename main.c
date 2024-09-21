@@ -33,6 +33,7 @@ int numProdutos = 0;
 #define MAX_CARRINHO 50
 Produto* carrinho[MAX_CARRINHO];
 int numCarrinho = 0;
+float valorTotalCarrinho = 0;
 
 //Funções Auxiliares - =================================
 
@@ -62,6 +63,7 @@ int produtoExiste(char* nome){
         if(strcmp(listaProdutos[i]->nome, nome) == 0){
             return 1;
         }
+        return 0;
     }
 }
 
@@ -73,7 +75,6 @@ void cadastrarProduto(){
     float preco;
 
     printf("\nOpção selecionada: [(1)] - | Cadastrar um produto |\n");
-
 
     printf("Digite o nome do produto:\n>> ");
     scanf("%s", &nome);
@@ -125,6 +126,7 @@ void comprarProduto(){
         if(strcmp(listaProdutos[i]->nome, nome) == 0){
             if(numCarrinho < MAX_CARRINHO){
                 carrinho[numCarrinho++] = listaProdutos[i];
+                valorTotalCarrinho += listaProdutos[i]->preco;
                 printf("\nProduto '%s' adicionado ao carrinho!\n", listaProdutos[i]->nome);
             }else{
                 printf("\nErro: Carrinho cheio! Não é possível adicionar mais produtos.\n");
@@ -150,6 +152,8 @@ void visualizarCarrinho(){
 
 void fecharPedido(){
     printf("\nOpção selecionada: [(5)] - | Finalizar o pedido |\n");
+    printf("\nValor a pagar: R$ %.2f\n", valorTotalCarrinho);
+    printf("\nObrigado pela preferência. Até a próxima!\n");
 }
 
 void temNoCarrinho(){
@@ -235,7 +239,6 @@ void menu(){
 
 int main(){
     
-    Produto produto;
 
     printf("  _    _       _                    _     _           _         _____      _    __  _ _                 _        ____                ___ _       \n");
     printf(" | |  | |     (_)                  (_)   | |         | |       / ____|    | |  /_/ | (_)               | |      |  _ \\              /_/ (_)      \n");
