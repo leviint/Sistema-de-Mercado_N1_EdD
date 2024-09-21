@@ -23,9 +23,14 @@ typedef struct{
 //Variáveis Globais - ==================================
 
 int proximoCodigo = 1;
+
 #define MAX_PRODUTOS 50
 Produto* listaProdutos[MAX_PRODUTOS];
 int numProdutos = 0;
+
+#define MAX_CARRINHO 50
+Produto* carrinho[MAX_CARRINHO];
+int numCarrinho = 0;
 
 //Funções Auxiliares - =================================
 
@@ -50,6 +55,14 @@ void infoProduto(Produto *p){
     printf("Preço: R$ %.2f\n", p->preco);
 }
 
+int produtoExiste(char* nome){
+    for(int i = 0; i < numProdutos; i++){
+        if(strcmp(listaProdutos[i]->nome, nome) == 0){
+            return 1;
+        }
+    }
+}
+
 //Funções - ============================================
 
 void cadastrarProduto(){
@@ -62,6 +75,11 @@ void cadastrarProduto(){
 
     printf("Digite o nome do produto:\n>> ");
     scanf("%s", &nome);
+
+    if(produtoExiste(nome)){
+        printf("\nErro: Produto com o nome '%s' já está cadastrado.\n", nome);
+        return;
+    }
 
     printf("Digite o preço do produto:\n>> ");
     scanf("%f", &preco);
@@ -95,6 +113,24 @@ void listarProdutos(){
 
 void comprarProduto(){
     printf("\nOpção selecionada: [(3)] - | Adicionar produtos ao carrinho |\n");
+
+    char nome[50];
+
+    printf("Digite o nome do produto que deseja adicionar ao carrinho:\n>> ");
+    scanf("%s", &nome);
+
+    for(int i = 0; i < numProdutos; i++){
+        if(strcmp(listaProdutos[i]->nome, nome) == 0){
+            if(numCarrinho < MAX_CARRINHO){
+                carrinho[numCarrinho++] = listaProdutos[i];
+                printf("\nProduto '%s' adicionado ao carrinho!\n", listaProdutos[i]->nome);
+            }else{
+                printf("\nErro: Carrinho cheio! Não é possível adicionar mais produtos.\n");
+            }
+            return;
+        }
+    }
+    printf("\nErro: Produto com nome %s não encontrado.\n", nome);
 }
 
 void visualizarCarrinho(){
@@ -110,7 +146,13 @@ void temNoCarrinho(){
 }
 
 void pegarProdutoPorCodigo(){
+    int codigo;
     printf("\nOpção selecionada: [(7)] - | Pegar um produto por código |\n");
+
+    printf("\nDigite o código do produto que deseja ver:\n>> ");
+    scanf("%d", &codigo);
+
+    
 }
 
 void fecharPrograma(){
