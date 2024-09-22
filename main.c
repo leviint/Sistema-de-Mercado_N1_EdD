@@ -76,8 +76,10 @@ void cadastrarProduto(){
 
     printf("\nOpção selecionada: [(1)] - | Cadastrar um produto |\n");
 
+    getchar();
+
     printf("Digite o nome do produto:\n>> ");
-    scanf("%s", &nome);
+    scanf("%[^\n]", nome);
 
     if(produtoExiste(nome)){
         printf("\nErro: Produto com o nome '%s' já está cadastrado.\n", nome);
@@ -119,8 +121,10 @@ void comprarProduto(){
 
     char nome[50];
 
+    getchar();
+
     printf("Digite o nome do produto que deseja adicionar ao carrinho:\n>> ");
-    scanf("%s", &nome);
+    scanf("%[^\n]", nome);
 
     for(int i = 0; i < numProdutos; i++){
         if(strcmp(listaProdutos[i]->nome, nome) == 0){
@@ -134,7 +138,7 @@ void comprarProduto(){
             return;
         }
     }
-    printf("\nErro: Produto com nome %s não encontrado.\n", nome);
+    printf("\nErro: Produto com nome '%s' não encontrado.\n", nome);
 }
 
 void visualizarCarrinho(){
@@ -152,12 +156,23 @@ void visualizarCarrinho(){
 
 void fecharPedido(){
     printf("\nOpção selecionada: [(5)] - | Finalizar o pedido |\n");
+
+    if(numCarrinho == 0){
+        printf("\nO carrinho está vazio. Não há nada para finalizar.\n");
+        return;
+    }
+
     printf("\nValor a pagar: R$ %.2f\n", valorTotalCarrinho);
     printf("\nObrigado pela preferência. Até a próxima!\n");
+
+    numCarrinho = 0;
+    valorTotalCarrinho = 0;
 }
 
 void temNoCarrinho(){
     printf("\nOpção selecionada: [(6)] - | Verificar a presença de um produto no carrinho |\n");
+    printf("\nDigite um produto registrado para verificar se ele está no carrinho\n>> ");
+
 }
 
 void pegarProdutoPorCodigo(){
