@@ -201,6 +201,9 @@ void pegarProdutoPorCodigo(){
     printf("\nDigite o código do produto que deseja ver:\n>> ");
     scanf("%d", &codigo);
 
+    printf("\nProduto com código %d:\n", codigo);
+    infoProduto(listaProdutos[codigo - 1]);
+
     
 }
 
@@ -242,7 +245,7 @@ void menu(){
                 cadastrarProduto();
                 break;
             case 2:
-                listarProdutos(produtos, quantidadeProdutos);
+                listarProdutos();
                 break;
             case 3:
                 comprarProduto();
