@@ -170,10 +170,29 @@ void fecharPedido(){
 }
 
 void temNoCarrinho(){
-    printf("\nOpção selecionada: [(6)] - | Verificar a presença de um produto no carrinho |\n");
-    printf("\nDigite um produto registrado para verificar se ele está no carrinho\n>> ");
+    char nome[50];
+    int encontrado = 0;
 
+    getchar();
+
+    printf("\nOpção selecionada: [(6)] - | Verificar a presença de um produto no carrinho |\n");
+    printf("\nDigite o nome de um produto registrado para verificar se ele está no carrinho\n>> ");
+    
+    scanf("%[^\n]", nome);
+
+    for (int i = 0; i < numCarrinho; i++){
+        if(strcmp(carrinho[i]->nome, nome) == 0){
+            printf("\nO produto '%s' está no carrinho!\n", nome);
+            encontrado = 1;
+            break;
+        }    
+    }
+
+    if(!encontrado){
+        printf("\nO produto '%s' não está no carrinho.\n", nome);
+    }
 }
+
 
 void pegarProdutoPorCodigo(){
     int codigo;
