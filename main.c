@@ -22,7 +22,7 @@ typedef struct{
 
 //Variáveis Globais - ==================================
 
-int proximoCodigo = 1; //Mostra qual deve ser o próximo código do produto registrado
+int proximoCodigo = 1;
 
 //Atribuições para a lista de produtos
 #define MAX_PRODUTOS 50
@@ -94,11 +94,10 @@ void cadastrarProduto(){
         if (verifyPreco != 1) {
             printf("\nErro: Entrada inválida. Digite um número válido para o preço.\n");
 
-            // Limpa o buffer de entrada
-            while (getchar() != '\n');  // Limpa até encontrar uma nova linha
+            while (getchar() != '\n');
         }
 
-    } while (verifyPreco != 1);  // Repete até a entrada ser válida
+    } while (verifyPreco != 1);
     Produto *p = criarProduto(nome, preco);
 
     infoProduto(p);
@@ -305,6 +304,3 @@ int main(){
 }
 
 //Arthur Lemos Bendini - UC24101142 - ================
-
-//Cadastro e adição de produtos ao carrinho não levam letras maiúsculas em consideração
-//Detectar inputs incorretos do usuário e fazer ele repetir o input até acertar
