@@ -18,7 +18,7 @@ typedef struct{
     Produto produto;
     int quantidade;
 
-}Carrinho;
+}ItemCarrinho;
 
 //Variáveis Globais - ==================================
 
@@ -31,13 +31,13 @@ int numProdutos = 0;
 
 //Atribuições para o carrinho
 #define MAX_CARRINHO 50
-Produto* carrinho[MAX_CARRINHO];
+ItemCarrinho carrinho[MAX_CARRINHO];
 int numCarrinho = 0;
 float valorTotalCarrinho = 0;
 
 //Funções Auxiliares - =================================
 
-Produto *criarProduto(char* nome, float preco){
+Produto *criarProduto(char* nome, float preco){ //Cria um novo produto, de certa forma "simula" a orientação a objeto
     Produto *p = calloc(1, sizeof(Produto));
     strcpy(p->nome, nome);
     p->preco = preco;
@@ -46,7 +46,7 @@ Produto *criarProduto(char* nome, float preco){
     return p;
 }
 
-void infoProduto(Produto *p){
+void infoProduto(Produto *p){ //Exibição das informações do produto, evitar repetição de código
     if (p == NULL) {
         printf("Produto inválido!\n");
         return;
@@ -58,7 +58,7 @@ void infoProduto(Produto *p){
     printf("Preço: R$ %.2f\n", p->preco);
 }
 
-int produtoExiste(char* nome){
+int produtoExiste(char* nome){ //Verifica se um produto existe percorrendo por todos eles e retornando true ou false
     for(int i = 0; i < numProdutos; i++){
         if(strcasecmp(listaProdutos[i]->nome, nome) == 0){
             return 1;
@@ -87,22 +87,22 @@ void cadastrarProduto(){
         return;
     }
 
-    do {
+    do { //Loop para garantir que o usuário entrou um input corretamente
         printf("Digite o preço do produto:\n>> ");
         verifyPreco = scanf("%f", &preco);
 
         if (verifyPreco != 1) {
             printf("\nErro: Entrada inválida. Digite um número válido para o preço.\n");
 
-            while (getchar() != '\n');
+            while (getchar() != '\n'); //Limpa o buffer
         }
 
-    } while (verifyPreco != 1);
-    Produto *p = criarProduto(nome, preco);
+    } while (verifyPreco != 1); //Enquanto a variável for diferente de verdadeira
+    Produto *p = criarProduto(nome, preco); //Cria um novo produto com os dados que o usuário inseriu
 
     infoProduto(p);
 
-    if(numProdutos < MAX_PRODUTOS){
+    if(numProdutos < MAX_PRODUTOS){ //Verifica se o máximo de produtos cadastrados foi atingido
         listaProdutos[numProdutos++] = p;
         printf("\nProduto cadastrado.\n");
     }else{
@@ -119,7 +119,7 @@ void listarProdutos(){
         return;
     }
 
-    for (int i = 0; i < numProdutos; i++){
+    for (int i = 0; i < numProdutos; i++){ //Itera todos os produtos para exibi-los no terminal
         infoProduto(listaProdutos[i]);
     }
 
@@ -129,17 +129,37 @@ void comprarProduto(){
     printf("\nOpção selecionada: [(3)] - | Adicionar produtos ao carrinho |\n");
 
     char nome[50];
+    int quantidade;
 
     getchar();
 
     printf("Digite o nome do produto que deseja adicionar ao carrinho:\n>> ");
     scanf("%[^\n]", nome);
 
-    for(int i = 0; i < numProdutos; i++){
-        if(strcasecmp(listaProdutos[i]->nome, nome) == 0){
-            if(numCarrinho < MAX_CARRINHO){
-                carrinho[numCarrinho++] = listaProdutos[i];
-                valorTotalCarrinho += listaProdutos[i]->preco;
+    printf("Digite a quantidade que deseja adicionar ao carrinho:\n>> ");
+    while(scanf("%d", &quantidade) != 1 || quantidade <= 0){ //Verifica se o input está sendo corretamente inserido (sendo um int e maior que 0)
+        printf("\nErro: Entrada inválida. Insira um número válido\n");
+        while(getchar() != '\n'); //limpa o buffer
+        printf("Digite a quantidade que deseja adicionar ao carrinho:\n>> ");
+    }
+
+    for(int i = 0; i < numProdutos; i++){ //Itera por todos os produtos registrados para ver se o nome digitado está na lista
+        if(strcasecmp(listaProdutos[i]->nome, nome) == 0){ //Compara o nome digitado com o produto da lista
+            for (int j = 0; j < numCarrinho; j++) { //Itera por todos os produtos no carrinho
+                if (strcmp(carrinho[j].produto.nome, listaProdutos[i]->nome) == 0) { //Compara o nome da lista identificado com o produto no carrinho para verificar se ele já está no carrinho
+                    carrinho[j].quantidade += quantidade; //Aumenta a quantidade do produto já contido no carrinho
+                    valorTotalCarrinho += listaProdutos[i]->preco * quantidade; //Adiciona o valor do produto e o multiplica pela quantidade inserida
+                    printf("\nProduto '%s' agora tem %d unidades no carrinho!\n", listaProdutos[i]->nome, carrinho[j].quantidade);
+                    return;
+                }
+            }
+
+
+            if(numCarrinho < MAX_CARRINHO){ //Verifica se a quantidade de itens no carrinho é menor que a quantidade máxima de itens
+                memcpy(&carrinho[numCarrinho].produto, listaProdutos[i], sizeof(Produto)); //Copia a memória do produto da lista para o carrinho
+                carrinho[numCarrinho].quantidade = 1; //Define a quantidade de produtos no carrinho se esse for o primeiro produto de um tipo contido nele
+                valorTotalCarrinho += listaProdutos[i]->preco; //Aumenta o valor total a pagar
+                numCarrinho++; //Aumenta a quantidade de produto no carrinho
                 printf("\nProduto '%s' adicionado ao carrinho!\n", listaProdutos[i]->nome);
             }else{
                 printf("\nErro: Carrinho cheio! Não é possível adicionar mais produtos.\n");
@@ -158,8 +178,8 @@ void visualizarCarrinho(){
         return;
     }
 
-    for (int i = 0; i < numCarrinho; i++){
-        infoProduto(carrinho[i]);
+    for (int i = 0; i < numCarrinho; i++){ //Exibe as informações do produto, não foi possível o uso da função infoProduto devido ela não conter a quantidade do produto
+        printf("\nInformações do Produto:\nCódigo: %d\nNome: %s x%d\nPreço: R$ %.2f\n", carrinho[i].produto.codigo, carrinho[i].produto.nome, carrinho[i].quantidade, carrinho[i].produto.preco * carrinho[i].quantidade);
     }
 }
 
@@ -174,8 +194,12 @@ void fecharPedido(){
     printf("\nValor a pagar: R$ %.2f\n", valorTotalCarrinho);
     printf("\nObrigado pela preferência. Até a próxima!\n");
 
-    numCarrinho = 0;
-    valorTotalCarrinho = 0;
+    numCarrinho = 0; //Reseta o número de produtos do carrinho
+    valorTotalCarrinho = 0; //Reseta o valor a se pagar do carrinho
+
+    for(int i = 0; i < numCarrinho; i++){ //Limpa os produtos do array
+        carrinho[i].quantidade = 0;
+    }
 }
 
 void temNoCarrinho(){
@@ -189,8 +213,8 @@ void temNoCarrinho(){
     
     scanf("%[^\n]", nome);
 
-    for (int i = 0; i < numCarrinho; i++){
-        if(strcasecmp(carrinho[i]->nome, nome) == 0){
+    for (int i = 0; i < numCarrinho; i++){ //Itera todos os produtos do carrinho para verificar se o produto está contido nele
+        if(strcasecmp(carrinho[i].produto.nome, nome) == 0){ //Compara o nome digitado com os produtos no carrinho
             printf("\nO produto '%s' está no carrinho!\n", nome);
             encontrado = 1;
             break;
@@ -211,7 +235,7 @@ void pegarProdutoPorCodigo(){
     scanf("%d", &codigo);
 
     printf("\nProduto com código %d:\n", codigo);
-    infoProduto(listaProdutos[codigo - 1]);
+    infoProduto(listaProdutos[codigo - 1]); //Pega o produto diretamente pela indexação, -1 devido a indexação começar por 0
 
     
 }
@@ -227,34 +251,33 @@ void erro(){
 //Função Menu - ==========================================
 
 void menu(){
-    setlocale(LC_ALL, "pt_BR.UTF8");
+    setlocale(LC_ALL, "pt_BR.UTF8"); //Define a codificação do terminal para mostrar caracteres especiais
 
     Produto produtos[50]; //Array estático, armazena até 50 produtos no total
-    Carrinho carrinho[50]; //Array estático, armazena até 50 produtos no carrinho
+    ItemCarrinho carrinho[50]; //Array estático, armazena até 50 produtos no carrinho
 
     int escolhaMenu;
 
-    int quantidadeProdutos = 0;
-
+    //Plaquinha bonitinha do mercado
     printf("---------------------------------\n");
     printf("=================================\n");
     printf("=== | Mercadinho da Esquina | ===\n");
     printf("=================================\n");
     printf("---------------------------------\n");
     
-    do{
+    do{ //Loop do menu enquanto o input for diferente de 8
 
         printf("\nDigite o que gostaria de fazer:\n\n");
 
         printf("[1] - Cadastrar um produto\n[2] - Listar os produtos cadastrados\n[3] - Adicionar produtos ao carrinho\n[4] - Visualizar o carrinho\n[5] - Finalizar o pedido\n[6] - Verificar a presença de um produto no carrinho\n[7] - Pegar um produto por código\n[8] - Fechar o programa\n\n>> ");
-         if(scanf("%d", &escolhaMenu) != 1){
+         if(scanf("%d", &escolhaMenu) != 1){ //Garante que o usuário possa inserir um input correto
             printf("\nDigite um número válido.\n");
 
-            while(getchar() != '\n');
+            while(getchar() != '\n'); //Limpa o buffer pela quadragésima vez
             continue;
         }
 
-        switch(escolhaMenu){
+        switch(escolhaMenu){ //Switch case pro menu, cada caso com apenas o chamado de uma função
             case 1:
                 cadastrarProduto();
                 break;
@@ -290,7 +313,7 @@ void menu(){
 
 int main(){
     
-
+    //Arte ASCII da UCB!
     printf("  _    _       _                    _     _           _         _____      _    __  _ _                 _        ____                ___ _       \n");
     printf(" | |  | |     (_)                  (_)   | |         | |       / ____|    | |  /_/ | (_)               | |      |  _ \\              /_/ (_)      \n");
     printf(" | |  | |_ __  ___   _____ _ __ ___ _  __| | __ _  __| | ___  | |     __ _| |_ ___ | |_  ___ __ _    __| | ___  | |_) |_ __ __ _ ___ _| |_  __ _ \n");
@@ -298,7 +321,7 @@ int main(){
     printf(" | |__| | | | | |\\ V /  __/ |  \\__ \\ | (_| | (_| | (_| |  __/ | |___| (_| | || (_) | | | (_| (_| | | (_| |  __/ | |_) | | | (_| \\__ \\ | | | (_| |\n");
     printf("  \\____/|_| |_|_| \\_/ \\___|_|  |___/_|\\__,_|\\__,_|\\__,_|\\___|  \\_____\\__,_|\\__\\___/|_|_|\\___\\__,_|  \\__,_|\\___| |____/|_|  \\__,_|___/_|_|_|\\__,_|\n\n");
   
-    menu();
+    menu(); //Chamado que faz tudo funcionar
 
     return 0;
 }
