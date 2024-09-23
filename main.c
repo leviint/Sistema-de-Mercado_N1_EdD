@@ -60,7 +60,7 @@ void infoProduto(Produto *p){
 
 int produtoExiste(char* nome){
     for(int i = 0; i < numProdutos; i++){
-        if(strcmp(listaProdutos[i]->nome, nome) == 0){
+        if(strcasecmp(listaProdutos[i]->nome, nome) == 0){
             return 1;
         }
     }
@@ -137,7 +137,7 @@ void comprarProduto(){
     scanf("%[^\n]", nome);
 
     for(int i = 0; i < numProdutos; i++){
-        if(strcmp(listaProdutos[i]->nome, nome) == 0){
+        if(strcasecmp(listaProdutos[i]->nome, nome) == 0){
             if(numCarrinho < MAX_CARRINHO){
                 carrinho[numCarrinho++] = listaProdutos[i];
                 valorTotalCarrinho += listaProdutos[i]->preco;
@@ -191,7 +191,7 @@ void temNoCarrinho(){
     scanf("%[^\n]", nome);
 
     for (int i = 0; i < numCarrinho; i++){
-        if(strcmp(carrinho[i]->nome, nome) == 0){
+        if(strcasecmp(carrinho[i]->nome, nome) == 0){
             printf("\nO produto '%s' está no carrinho!\n", nome);
             encontrado = 1;
             break;
