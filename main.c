@@ -290,3 +290,6 @@ int main(){
 }
 
 //Arthur Lemos Bendini - UC24101142 - ================
+
+//Cadastro e adição de produtos ao carrinho não levam letras maiúsculas em consideração
+//Detectar inputs incorretos do usuário e fazer ele repetir o input até acertar
