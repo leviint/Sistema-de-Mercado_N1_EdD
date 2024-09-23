@@ -73,6 +73,7 @@ void cadastrarProduto(){
 
     char nome[50];
     float preco;
+    int verifyPreco;
 
     printf("\nOpção selecionada: [(1)] - | Cadastrar um produto |\n");
 
@@ -86,9 +87,18 @@ void cadastrarProduto(){
         return;
     }
 
-    printf("Digite o preço do produto:\n>> ");
-    scanf("%f", &preco);
+    do {
+        printf("Digite o preço do produto:\n>> ");
+        verifyPreco = scanf("%f", &preco);
 
+        if (verifyPreco != 1) {
+            printf("\nErro: Entrada inválida. Digite um número válido para o preço.\n");
+
+            // Limpa o buffer de entrada
+            while (getchar() != '\n');  // Limpa até encontrar uma nova linha
+        }
+
+    } while (verifyPreco != 1);  // Repete até a entrada ser válida
     Produto *p = criarProduto(nome, preco);
 
     infoProduto(p);
@@ -238,7 +248,12 @@ void menu(){
         printf("\nDigite o que gostaria de fazer:\n\n");
 
         printf("[1] - Cadastrar um produto\n[2] - Listar os produtos cadastrados\n[3] - Adicionar produtos ao carrinho\n[4] - Visualizar o carrinho\n[5] - Finalizar o pedido\n[6] - Verificar a presença de um produto no carrinho\n[7] - Pegar um produto por código\n[8] - Fechar o programa\n\n>> ");
-        scanf("%d", &escolhaMenu);
+         if(scanf("%d", &escolhaMenu) != 1){
+            printf("\nDigite um número válido.\n");
+
+            while(getchar() != '\n');
+            continue;
+        }
 
         switch(escolhaMenu){
             case 1:

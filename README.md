@@ -1,6 +1,7 @@
 # Sistema-de-Mercado_N1_EdD
 Contém o projeto da atividade avaliativa da N1 da disciplina de Estrutura de Dados da UCB.  
-## Objetivo
+## Objetivo ![Target Badge](https://img.shields.io/badge/-null?logo=target&logoColor=red&labelColor=white)
+
 O trabalho consiste em desenvolver um sistema de mercado com um menu interativo e intuitivo pelo terminal.  
 O usuário entrará no programa com um menu contendo diversas opções para navegar pelo sistema.  
 ## Principais Funcionalidades
@@ -22,7 +23,8 @@ O usuário entrará no programa com um menu contendo diversas opções para nave
 - Não exige inputs "_Case Sensitive_"
 - Em caso de erros, o programa avisará o usuário e retornará ao menu em caso de um input incorreto
 
-## Estrutura do Código
+## Estrutura do Código ![Programming Badge](https://img.shields.io/badge/-%3C%2F%3E-blue?logo=code&logoColor=white)
+
 
 No desenvolvimento do projeto, fiz uso de:
 - Structs
