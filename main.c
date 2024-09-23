@@ -157,7 +157,7 @@ void comprarProduto(){
 
             if(numCarrinho < MAX_CARRINHO){ //Verifica se a quantidade de itens no carrinho é menor que a quantidade máxima de itens
                 memcpy(&carrinho[numCarrinho].produto, listaProdutos[i], sizeof(Produto)); //Copia a memória do produto da lista para o carrinho
-                carrinho[numCarrinho].quantidade = 1; //Define a quantidade de produtos no carrinho se esse for o primeiro produto de um tipo contido nele
+                carrinho[numCarrinho].quantidade = quantidade; //Define a quantidade de produtos no carrinho
                 valorTotalCarrinho += listaProdutos[i]->preco; //Aumenta o valor total a pagar
                 numCarrinho++; //Aumenta a quantidade de produto no carrinho
                 printf("\nProduto '%s' adicionado ao carrinho!\n", listaProdutos[i]->nome);
@@ -236,17 +236,78 @@ void pegarProdutoPorCodigo(){
 
     printf("\nProduto com código %d:\n", codigo);
     infoProduto(listaProdutos[codigo - 1]); //Pega o produto diretamente pela indexação, -1 devido a indexação começar por 0
-
-    
 }
 
 void removerDoCarrinho(){
     char nome[50];
+    int qntRemover, encontrado = 0;
+
+    getchar();
+
     printf("\nOpção selecionada: [(8)] - | Remover um produto do carrinho |\n");
+
+    if(numCarrinho == 0){
+            printf("\nErro: O carrinho está vazio. Não há nada para remover.\n");
+            return;
+        }
+
+    printf("\nDigite o nome do produto que você gostaria de remover do seu carrinho:\n>> ");
+    scanf("%[^\n]", nome);
+
+    for (int i = 0; i < numCarrinho; i++){ //Itera todos os produtos do carrinho para verificar se o produto está contido nele
+        if(strcasecmp(carrinho[i].produto.nome, nome) == 0){ //Compara o nome digitado com os produtos no carrinho
+            encontrado = 1;
+            printf("\nDigite a quantidade que deseja remover (atual no carrinho: %d):\n>> ", carrinho[i].quantidade);
+            scanf("%d", &qntRemover);
+
+            if(qntRemover > carrinho[i].quantidade || qntRemover <= 0){
+                printf("\nErro: Quantidade inválida.\n");
+                return;
+            }
+
+            carrinho[i].quantidade -= qntRemover;
+            
+            if(carrinho[i].quantidade == 0){
+                printf("Produto '%s' removido completamente do carrinho.\n", nome);
+            }else{
+                printf("\nQuantidade de '%s' removida: %d\nQuantidade restante no carrinho: %d", nome, qntRemover, carrinho[i].quantidade);
+            }
+            break;
+        }    
+    }
+
+    if(!encontrado){
+        printf("\nErro: Produto '%s' não encontrado no carrinho.\n", nome);
+    }
+
 }
 
 void deletarProduto(){
-    printf("\nOpção selecionada: [(9)] - | Remover um produto do carrinho |\n");
+    char nome[50];
+    int encontrado = 0;
+
+    getchar();
+
+    printf("\nOpção selecionada: [(9)] - | Deletar um produto registrado |\n");
+
+    if(numProdutos == 0){
+            printf("\nErro: Não há produtos registrados para serem deletados.\n");
+            return;
+        }
+
+    printf("\nDigite o nome do produto que você gostaria de remover do seu carrinho:\n>> ");
+    scanf("%[^\n]", nome);
+
+    for (int i = 0; i < numProdutos; i++){ //Itera todos os produtos registrados para verificar se o produto está contido nele
+        if(strcasecmp(carrinho[i].produto.nome, nome) == 0){ //Compara o nome digitado com os produtos registrados
+            carrinho[i].quantidade = 0;
+            printf("\nProduto '%s' deletado.\n", nome);
+            encontrado = 1;
+            break;
+        }    
+    }
+    
+
 }
 
 void fecharPrograma(){
