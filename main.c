@@ -240,6 +240,15 @@ void pegarProdutoPorCodigo(){
     
 }
 
+void removerDoCarrinho(){
+    char nome[50];
+    printf("\nOpção selecionada: [(8)] - | Remover um produto do carrinho |\n");
+}
+
+void deletarProduto(){
+    printf("\nOpção selecionada: [(9)] - | Remover um produto do carrinho |\n");
+}
+
 void fecharPrograma(){
     printf("\nFinalizando programa...\nAté a próxima!");
 }
@@ -269,7 +278,7 @@ void menu(){
 
         printf("\nDigite o que gostaria de fazer:\n\n");
 
-        printf("[1] - Cadastrar um produto\n[2] - Listar os produtos cadastrados\n[3] - Adicionar produtos ao carrinho\n[4] - Visualizar o carrinho\n[5] - Finalizar o pedido\n[6] - Verificar a presença de um produto no carrinho\n[7] - Pegar um produto por código\n[8] - Fechar o programa\n\n>> ");
+        printf("[1] - Cadastrar um produto\n[2] - Listar os produtos cadastrados\n[3] - Adicionar produtos ao carrinho\n[4] - Visualizar o carrinho\n[5] - Finalizar o pedido\n[6] - Verificar a presença de um produto no carrinho\n[7] - Pegar um produto por código\n[8] - Remover um produto do carrinho\n[9] - Deletar um produto registrado\n[0] - Fechar o programa\n\n>> ");
          if(scanf("%d", &escolhaMenu) != 1){ //Garante que o usuário possa inserir um input correto
             printf("\nDigite um número válido.\n");
 
@@ -300,13 +309,19 @@ void menu(){
                 pegarProdutoPorCodigo();
                 break;
             case 8:
+                removerDoCarrinho();
+                break;
+            case 9:
+                deletarProduto();
+                break;
+            case 0:
                 fecharPrograma();
                 break;
             default:
                 erro();
                 break;
         }
-    }while(escolhaMenu != 8);
+    }while(escolhaMenu != 0);
 }
 
 //Main - ===============================================
@@ -321,7 +336,7 @@ int main(){
     printf(" | |__| | | | | |\\ V /  __/ |  \\__ \\ | (_| | (_| | (_| |  __/ | |___| (_| | || (_) | | | (_| (_| | | (_| |  __/ | |_) | | | (_| \\__ \\ | | | (_| |\n");
     printf("  \\____/|_| |_|_| \\_/ \\___|_|  |___/_|\\__,_|\\__,_|\\__,_|\\___|  \\_____\\__,_|\\__\\___/|_|_|\\___\\__,_|  \\__,_|\\___| |____/|_|  \\__,_|___/_|_|_|\\__,_|\n\n");
   
-    menu(); //Chamado que faz tudo funcionar
+    menu(); //Chamado mágico que faz tudo funcionar
 
     return 0;
 }
