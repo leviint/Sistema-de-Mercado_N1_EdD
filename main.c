@@ -270,7 +270,7 @@ void removerDoCarrinho(){
             if(carrinho[i].quantidade == 0){
                 printf("Produto '%s' removido completamente do carrinho.\n", nome);
             }else{
-                printf("\nQuantidade de '%s' removida: %d\nQuantidade restante no carrinho: %d", nome, qntRemover, carrinho[i].quantidade);
+                printf("\nQuantidade de '%s' removida: %d\nQuantidade restante no carrinho: %d\n", nome, qntRemover, carrinho[i].quantidade);
             }
             break;
         }    
