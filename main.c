@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <locale.h>
+#include <stdio.h> //Biblioteca Input e Output
+#include <stdlib.h> //Biblioteca Padrão
+#include <string.h> //Biblioteca para funções relacionadas a strings
+#include <locale.h> //Biblioteca que suporta configuração regional
 
 //Structs - ============================================
 
@@ -256,16 +256,16 @@ void removerDoCarrinho(){
 
     for (int i = 0; i < numCarrinho; i++){ //Itera todos os produtos do carrinho para verificar se o produto está contido nele
         if(strcasecmp(carrinho[i].produto.nome, nome) == 0){ //Compara o nome digitado com os produtos no carrinho
-            encontrado = 1;
+            encontrado = 1; //Confirma que o produto foi encontrado
             printf("\nDigite a quantidade que deseja remover (atual no carrinho: %d):\n>> ", carrinho[i].quantidade);
             scanf("%d", &qntRemover);
 
-            if(qntRemover > carrinho[i].quantidade || qntRemover <= 0){
+            if(qntRemover > carrinho[i].quantidade || qntRemover <= 0){ //Se a quantidade a remover for maior que a quantidade de produtos no carrinho OU se a quantidade a remover for menor ou igual a 0
                 printf("\nErro: Quantidade inválida.\n");
                 return;
             }
 
-            carrinho[i].quantidade -= qntRemover;
+            carrinho[i].quantidade -= qntRemover; //Decrementa a quantidade de acordo com o valor de qntRemover
             
             if(carrinho[i].quantidade == 0){
                 printf("Produto '%s' removido completamente do carrinho.\n", nome);
@@ -299,15 +299,30 @@ void deletarProduto(){
     scanf("%[^\n]", nome);
 
     for (int i = 0; i < numProdutos; i++){ //Itera todos os produtos registrados para verificar se o produto está contido nele
-        if(strcasecmp(carrinho[i].produto.nome, nome) == 0){ //Compara o nome digitado com os produtos registrados
-            carrinho[i].quantidade = 0;
-            printf("\nProduto '%s' deletado.\n", nome);
+        if(strcasecmp(listaProdutos[i]->nome, nome) == 0){ //Compara o nome digitado com os produtos registrados
             encontrado = 1;
+
+            for(int j = i; j < numProdutos - 1; j++){ //Reajusta o array para compensar a remoção do produto do registro
+                listaProdutos[j] = listaProdutos[j + 1];
+            }
+            numProdutos--; //Decrementa o número de produtos
+            listaProdutos[i]->codigo--; //Decrementa o código para que o espaço atribuído ao código do produto removido seja aberto novamente
+
+            printf("\nProduto '%s' deletado do registro.\n", nome);
+
+            for(int k = 0; k < numCarrinho; k++){
+                if(strcasecmp(carrinho[k].produto.nome, nome) == 0){ //Verifica se o produto deletado está no carrinho
+                    for (int l = k; l < numCarrinho - 1; l++) { //Reajusta os itens no carrinho
+                        carrinho[l] = carrinho[l + 1]; // Move os itens no carrinho
+                    }
+                    numCarrinho--; // Diminui o contador do carrinho
+                    break;
+                    printf("\nProduto '%s' removido do carrinho devido a remoção do seu registro.\n", nome);
+                }
+            }
             break;
         }    
     }
-    
-
 }
 
 void fecharPrograma(){
@@ -321,7 +336,6 @@ void erro(){
 //Função Menu - ==========================================
 
 void menu(){
-    setlocale(LC_ALL, "pt_BR.UTF8"); //Define a codificação do terminal para mostrar caracteres especiais
 
     Produto produtos[50]; //Array estático, armazena até 50 produtos no total
     ItemCarrinho carrinho[50]; //Array estático, armazena até 50 produtos no carrinho
@@ -388,6 +402,7 @@ void menu(){
 //Main - ===============================================
 
 int main(){
+    setlocale(LC_ALL, "pt_BR.UTF8"); //Define a codificação do terminal para mostrar caracteres especiais
     
     //Arte ASCII da UCB!
     printf("  _    _       _                    _     _           _         _____      _    __  _ _                 _        ____                ___ _       \n");
