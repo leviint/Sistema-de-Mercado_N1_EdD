@@ -8,12 +8,15 @@ O usuário entrará no programa com um menu contendo diversas opções para nave
 - Cadastro de até 50 produtos únicos
 - Listagem de produtos cadastrados
 - Carrinho
-    - Adição de até 50 produtos cadastrados
+    - Adição de até 50 produtos distintos cadastrados
+        - Quantidades de cada produto podem ser especificadas
     - Remoção de produtos
     - Busca de produtos contidos no carrinho
 - Finalização de pedido
     - Somatória dos valores dos produtos adicionados ao carrinho
     - Remoção dos produtos do carrinho após a compra
+- Remoção completa de um produto do registro
+- Remoção de um produto do carrinho de compras
 
 ### Fácil usabilidade do Sistema
 
